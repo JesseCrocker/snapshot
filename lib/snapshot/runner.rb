@@ -92,6 +92,24 @@ module Snapshot
       raise "Could not find simulator '#{name}' to install the app on."
     end
 
+    def set_simulator_to_full_size()
+      Helper.log.info "Resizing simulator window".yellow
+      #resize simulator to 100%
+      begin
+        `osascript<<APPLESCRIPT
+tell application "Simulator"
+  activate
+  delay 2
+end tell
+tell application "System Events"
+  keystroke "1" using {command down}
+end tell
+APPLESCRIPT`
+      rescue Exception => ex
+        Helper.log.error 'error resizing simulator'.red
+      end
+    end
+
     def reinstall_app(device, language, locale)
       Helper.log.info "Reinstalling app...".yellow unless $verbose
 
@@ -145,6 +163,8 @@ module Snapshot
       lines = []
       errors = []
       PTY.spawn(command) do |stdout, stdin, pid|
+
+        set_simulator_to_full_size
 
         # Waits for process so that we can see if anything has failed
         begin
