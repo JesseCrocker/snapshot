@@ -101,12 +101,18 @@ module Snapshot
       def com(cmd)
         puts cmd.magenta if $verbose
 
-        IO.popen("#{cmd} 2>&1", err: [:child, :out]) do |io|
-          io.each do |line|
-            puts line if (line.to_s.length > 0 and $verbose)
+        begin  
+          Timeout.timeout(10) do
+            @pipe = IO.popen("#{cmd} 2>&1", err: [:child, :out])
+            @pipe.each do |line|
+              puts line if (line.to_s.length > 0 and $verbose)
+            end
+            @pipe.close
           end
-          io.close
-        end
+        rescue Timeout::Error
+          Helper.log.error "command timed out".red
+          Process.kill 9, @pipe.pid
+        end        
       end
 
       udid = udid_for_simulator(device)
