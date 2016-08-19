@@ -8,9 +8,6 @@ module Snapshot
     def work(clean: true, build: true, take_snapshots: true)
       SnapshotConfig.shared_instance.js_file # to verify the file can be found earlier
 
-      Builder.new.build_app(clean: clean) if build
-      @app_path = determine_app_path
-
       counter = 0
       errors = []
 
@@ -21,6 +18,9 @@ module Snapshot
 
       SnapshotConfig.shared_instance.devices.each do |device|
         SnapshotConfig.shared_instance.languages.each do |language_item|
+          
+          Builder.new.build_app(clean: clean, device:device) if build
+          @app_path = determine_app_path
 
           if language_item.instance_of?String
             language = language_item

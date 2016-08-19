@@ -5,7 +5,7 @@ module Snapshot
       @build_dir = SnapshotConfig.shared_instance.build_dir || '/tmp/snapshot'
     end
 
-    def build_app(clean: true)
+    def build_app(clean: true, device:"iPhone 6s")
       FileUtils.rm_rf(@build_dir) if clean
 
       command = SnapshotConfig.shared_instance.build_command
@@ -13,7 +13,7 @@ module Snapshot
       if not command
         # That's the default case, user did not provide a custom build_command
         raise "Could not find project. Please pass the path to your project using 'project_path'.".red unless SnapshotConfig.shared_instance.project_path
-        command = generate_build_command(clean: clean)
+        command = generate_build_command(device, clean: clean)
       end
 
       Helper.log.info "Building project '#{SnapshotConfig.shared_instance.project_name}' - this might take some time...".green
@@ -52,8 +52,10 @@ module Snapshot
         end
       end
 
-      def generate_build_command(clean: true)
+      def generate_build_command(device, clean: true)
         scheme = SnapshotConfig.shared_instance.scheme
+        device = device.sub(/ \(\d.\d\)/, "")
+
 
         proj_path = SnapshotConfig.shared_instance.project_path
         proj_key = 'project'
@@ -70,7 +72,7 @@ module Snapshot
 
         [
           build_command,
-          "-sdk iphonesimulator",
+          "-destination 'platform=iOS Simulator,name=" + device + "'",
           "CONFIGURATION_BUILD_DIR='#{@build_dir}/build'",
           "-#{proj_key} '#{proj_path}'",
           "-scheme '#{scheme}'",
