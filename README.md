@@ -1,36 +1,10 @@
-<h3 align="center">
-  <a href="https://github.com/KrauseFx/fastlane">
-    <img src="assets/fastlane.png" width="150" />
-    <br />
-    fastlane
-  </a>
-</h3>
-<p align="center">
-  <a href="https://github.com/KrauseFx/deliver">deliver</a> &bull; 
-  <b>snapshot</b> &bull; 
-  <a href="https://github.com/KrauseFx/frameit">frameit</a> &bull; 
-  <a href="https://github.com/KrauseFx/PEM">PEM</a> &bull; 
-  <a href="https://github.com/KrauseFx/sigh">sigh</a> &bull; 
-  <a href="https://github.com/KrauseFx/produce">produce</a> &bull; 
-  <a href="https://github.com/KrauseFx/cert">cert</a> &bull; 
-  <a href="https://github.com/KrauseFx/codes">codes</a> &bull;
-  <a href="https://github.com/fastlane/spaceship">spaceship</a> &bull;
-  <a href="https://github.com/fastlane/pilot">pilot</a> &bull;
-  <a href="https://github.com/fastlane/boarding">boarding</a> &bull;
-  <a href="https://github.com/fastlane/gym">gym</a>
-</p>
--------
-
-<p align="center">
-    <img src="assets/snapshot.png">
-</p>
-
-snapshot
+snapshot-js
 ============
 
-[![Twitter: @KauseFx](https://img.shields.io/badge/contact-@KrauseFx-blue.svg?style=flat)](https://twitter.com/KrauseFx)
+## Fork on snapshot that still supports JS automator scripts and works with xcode 7.
+
 [![License](http://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/KrauseFx/snapshot/blob/master/LICENSE)
-[![Gem](https://img.shields.io/gem/v/snapshot.svg?style=flat)](http://rubygems.org/gems/snapshot)
+[![Gem](https://img.shields.io/gem/v/snapshot.svg?style=flat)](http://rubygems.org/gems/snapshot-js)
 
 ###### Automate taking localized screenshots of your iOS app on every device
 
