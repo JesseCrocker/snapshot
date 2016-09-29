@@ -128,9 +128,7 @@ module Snapshot
 
       actual_devices = []
       self.devices.each do |current|
-        current += version_suffix(self.ios_version) unless current.include? " ("
-
-        if Simulators.available_devices.include? current
+        if Simulators.available_devices.include? current + version_suffix(self.ios_version)
           actual_devices << current
         else
           raise "Device '#{current}' not found. Available device types: #{Simulators.available_devices}".red

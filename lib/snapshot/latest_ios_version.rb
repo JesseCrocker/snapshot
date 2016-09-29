@@ -5,7 +5,7 @@ module Snapshot
       return ENV["SNAPSHOT_IOS_VERSION"] if ENV["SNAPSHOT_IOS_VERSION"]
       return @version if @version
 
-      output = `xcodebuild -version -sdk`.split("Mac").last # don't care about the Mac Part
+      output = `xcodebuild -version -sdk`
       matched = output.match(/iPhoneSimulator([\d\.]+)\.sdk/)
       
       if matched.length > 1
