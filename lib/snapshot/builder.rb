@@ -16,8 +16,8 @@ module Snapshot
         command = generate_build_command(device, clean: clean)
       end
 
-      Helper.log.info "Building project '#{SnapshotConfig.shared_instance.project_name}' - this might take some time...".green
-      Helper.log.debug command.yellow
+      UI.current.log.info "Building project '#{SnapshotConfig.shared_instance.project_name}' - this might take some time...".green
+      UI.current.log.debug command.yellow
 
       all_lines = []
 
@@ -27,7 +27,7 @@ module Snapshot
           begin
             parse_build_line(line) if line.length > 2
           rescue => ex
-            Helper.log.fatal all_lines.join("\n")
+            UI.current.log.fatal all_lines.join("\n")
             raise ex
           end
         end
@@ -37,10 +37,10 @@ module Snapshot
       cmdstatus = $?.exitstatus
 
       if cmdstatus == 0 || all_lines.join('\n').include?('** BUILD SUCCEEDED **')
-        Helper.log.info "BUILD SUCCEEDED".green
+        UI.current.log.info "BUILD SUCCEEDED".green
         return true
       else
-        Helper.log.info(all_lines.join(' '))
+        UI.current.log.info(all_lines.join(' '))
         raise "Looks like the build was not successful."
       end
     end

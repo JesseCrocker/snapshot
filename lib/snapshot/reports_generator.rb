@@ -39,7 +39,7 @@ module Snapshot
       File.write(export_path, html)
 
       export_path = File.expand_path(export_path)
-      Helper.log.info "Successfully created HTML file with an overview of all the screenshots: '#{export_path}'".green
+      UI.current.log.info "Successfully created HTML file with an overview of all the screenshots: '#{export_path}'".green
       system("open '#{export_path}'") unless ENV["SNAPSHOT_SKIP_OPEN_SUMMARY"]
     end
 

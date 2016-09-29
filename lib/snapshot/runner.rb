@@ -37,7 +37,7 @@ module Snapshot
           begin
             errors.concat(run_tests(device, language, locale))
           rescue => ex
-            Helper.log.error(ex)
+            UI.current.log.error(ex)
           end
 
           # we also want to see the screenshots when something went wrong
@@ -58,15 +58,15 @@ module Snapshot
       ReportsGenerator.new.generate
 
       if errors.count > 0
-        Helper.log.error "-----------------------------------------------------------"
-        Helper.log.error errors.join(' - ').red
-        Helper.log.error "-----------------------------------------------------------"
+        UI.current.log.error "-----------------------------------------------------------"
+        UI.current.log.error errors.join(' - ').red
+        UI.current.log.error "-----------------------------------------------------------"
         raise "Finished generating #{counter} screenshots with #{errors.count} errors.".red
       else
-        Helper.log.info "Successfully finished generating #{counter} screenshots.".green
+        UI.current.log.info "Successfully finished generating #{counter} screenshots.".green
       end
       
-      Helper.log.info "Check it out here: #{SnapshotConfig.shared_instance.screenshots_path}".green
+      UI.current.log.info "Check it out here: #{SnapshotConfig.shared_instance.screenshots_path}".green
     end
 
     def clean_old_traces
@@ -93,7 +93,7 @@ module Snapshot
     end
 
     def set_simulator_to_full_size()
-      Helper.log.info "Resizing simulator window".yellow
+      UI.current.log.info "Resizing simulator window".yellow
       #resize simulator to 100%
       begin
         `osascript<<APPLESCRIPT
@@ -106,12 +106,12 @@ tell application "System Events"
 end tell
 APPLESCRIPT`
       rescue Exception => ex
-        Helper.log.error 'error resizing simulator'.red
+        UI.current.log.error 'error resizing simulator'.red
       end
     end
 
     def reinstall_app(device, language, locale)
-      Helper.log.info "Reinstalling app...".yellow unless $verbose
+      UI.current.log.info "Reinstalling app...".yellow unless $verbose
 
       app_identifier = ENV["SNAPSHOT_APP_IDENTIFIER"]
       app_identifier ||= @app_identifier
@@ -128,7 +128,7 @@ APPLESCRIPT`
             @pipe.close
           end
         rescue Timeout::Error
-          Helper.log.error "command timed out".red
+          UI.current.log.error "command timed out".red
           Process.kill 9, @pipe.pid
         end        
       end
@@ -150,13 +150,13 @@ APPLESCRIPT`
     end
 
     def run_tests(device, language, locale)
-      Helper.log.info "Running tests on #{device} in language #{language} (locale #{locale})".green
+      UI.current.log.info "Running tests on #{device} in language #{language} (locale #{locale})".green
       
       clean_old_traces
 
       ENV['SNAPSHOT_LANGUAGE'] = language
       command = generate_test_command(device, language, locale)
-      Helper.log.debug command.yellow
+      UI.current.log.debug command.yellow
       
       retry_run = false
 
@@ -179,17 +179,17 @@ APPLESCRIPT`
                 when :retry
                   retry_run = true
                 when :screenshot
-                  Helper.log.info "Successfully took screenshot 📱"
+                  UI.current.log.info "Successfully took screenshot 📱"
                 when :pass
-                  Helper.log.info line.strip.gsub("Pass:", "✓").green
+                  UI.current.log.info line.strip.gsub("Pass:", "✓").green
                 when :fail
-                  Helper.log.info line.strip.gsub("Fail:", "✗").red
+                  UI.current.log.info line.strip.gsub("Fail:", "✗").red
                 when :need_permission
                   raise "Looks like you may need to grant permission for Instruments to analyze other processes.\nPlease Ctrc + C and run this command: \"#{command}\""
                 end
             rescue Exception => ex
-              Helper.log.error lines.join('')
-              Helper.log.error ex.to_s.red
+              UI.current.log.error lines.join('')
+              UI.current.log.error ex.to_s.red
               errors << ex.to_s
             end
           end
@@ -203,7 +203,7 @@ APPLESCRIPT`
       end
 
       if retry_run
-        Helper.log.error "Instruments tool failed again. Re-trying..." if $verbose
+        UI.current.log.error "Instruments tool failed again. Re-trying..." if $verbose
         sleep 2 # We need enough sleep... that's an instruments bug
         errors = run_tests(device, language, locale)
       end

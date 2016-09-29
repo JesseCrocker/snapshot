@@ -9,24 +9,24 @@ module Snapshot
 
     def self.check_xcode_select
       unless `xcode-select -v`.include?"xcode-select version "
-        Helper.log.fatal '#############################################################'
-        Helper.log.fatal "# You have to install the Xcode commdand line tools to use snapshot"
-        Helper.log.fatal "# Install the latest version of Xcode from the AppStore"
-        Helper.log.fatal "# Run xcode-select --install to install the developer tools"
-        Helper.log.fatal '#############################################################'
+        UI.current.log.fatal '#############################################################'
+        UI.current.log.fatal "# You have to install the Xcode commdand line tools to use snapshot"
+        UI.current.log.fatal "# Install the latest version of Xcode from the AppStore"
+        UI.current.log.fatal "# Run xcode-select --install to install the developer tools"
+        UI.current.log.fatal '#############################################################'
         raise "Run 'xcode-select --install' and start snapshot again"
       end
     end
 
     def self.check_simulators
-      Helper.log.debug "Found #{Simulators.available_devices.count} simulators." if $verbose
+      UI.current.log.debug "Found #{Simulators.available_devices.count} simulators." if $verbose
       if Simulators.available_devices.count < 1
-        Helper.log.fatal '#############################################################'
-        Helper.log.fatal "# You have to add new simulators using Xcode"
-        Helper.log.fatal "# You can let snapshot create new simulators: 'snapshot reset_simulators'"
-        Helper.log.fatal "# Manually: Xcode => Window => Devices"
-        Helper.log.fatal "# Please run `instruments -s` to verify your xcode path"
-        Helper.log.fatal '#############################################################'
+        UI.current.log.fatal '#############################################################'
+        UI.current.log.fatal "# You have to add new simulators using Xcode"
+        UI.current.log.fatal "# You can let snapshot create new simulators: 'snapshot reset_simulators'"
+        UI.current.log.fatal "# Manually: Xcode => Window => Devices"
+        UI.current.log.fatal "# Please run `instruments -s` to verify your xcode path"
+        UI.current.log.fatal '#############################################################'
         raise "Create the new simulators and run this script again"
       end
     end
@@ -37,11 +37,11 @@ module Snapshot
 
     def self.check_xctool
       if not self.xctool_installed?
-        Helper.log.info '#############################################################'
-        Helper.log.info "# xctool is recommended to build the apps"
-        Helper.log.info "# Install it using 'brew install xctool'"
-        Helper.log.info "# Falling back to xcodebuild instead "
-        Helper.log.info '#############################################################'
+        UI.current.log.info '#############################################################'
+        UI.current.log.info "# xctool is recommended to build the apps"
+        UI.current.log.info "# Install it using 'brew install xctool'"
+        UI.current.log.info "# Falling back to xcodebuild instead "
+        UI.current.log.info '#############################################################'
       end
     end
 

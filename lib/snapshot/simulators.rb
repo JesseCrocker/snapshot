@@ -15,7 +15,7 @@ module Snapshot
     end
 
     def self.available_devices(name_only = false)
-      Helper.log.info "Fetching available devices" if $verbose
+      UI.current.log.info "Fetching available devices" if $verbose
       result = []
       
       output = self.raw_simulators

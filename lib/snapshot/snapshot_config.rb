@@ -64,7 +64,7 @@ module Snapshot
       set_defaults
 
       if File.exists?path
-        Helper.log.info "Using '#{path}'".green if $verbose
+        UI.current.log.info "Using '#{path}'".green if $verbose
         self.snapshot_file = SnapshotFile.new(path, self)
 
         self.verify_devices
@@ -73,7 +73,7 @@ module Snapshot
           raise "Could not find Snapfile at path '#{path}'. Make sure you pass the full path, including 'Snapfile'".red
         else
           # Using default settings, since user didn't provide a path
-          Helper.log.error "Could not find './Snapfile'. It is recommended to create a file using 'snapshot init' into the current directory. Using the defaults now.".red
+          UI.current.log.error "Could not find './Snapfile'. It is recommended to create a file using 'snapshot init' into the current directory. Using the defaults now.".red
           self.verify_devices
         end
       end
@@ -183,11 +183,11 @@ module Snapshot
         project_key = 'project'
         project_key = 'workspace' if project_path.end_with?'.xcworkspace'
         command = "xcodebuild -#{project_key} '#{project_path}' -list"
-        Helper.log.debug command if $verbose
+        UI.current.log.debug command if $verbose
         
         schemes = `#{command}`.split("Schemes:").last.split("\n").each { |a| a.strip! }.delete_if { |a| a == '' }
         
-        Helper.log.debug "Found available schemes: #{schemes}" if $verbose
+        UI.current.log.debug "Found available schemes: #{schemes}" if $verbose
 
         self.manual_scheme = schemes.first if schemes.count == 1
 
